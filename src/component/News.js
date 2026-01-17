@@ -1,72 +1,72 @@
 import React, { Component } from 'react'
 import NewsItems from './NewsItems'
+import Spinner from './Spinner'
+
 
 
 export default class News extends Component {
-    articles = [
-        {
-            "source": {
-                "id": "techradar",
-                "name": "TechRadar"
-            },
-            "author": "Andy Murray",
-            "title": "India vs New Zealand 2026 cricket series live streams: How to watch 2nd ODI from anywhere",
-            "description": "All the ways to watch the India vs New Zealand ODI series from anywhere in the world as the world's top two men's 50-over side clash in the sub-continent.",
-            "url": "https://www.techradar.com/how-to-watch/cricket/india-vs-new-zealand-2026-cricket-odi-series-free",
-            "urlToImage": "https://cdn.mos.cms.futurecdn.net/meGV4Ar4Q4jtavdK26EXhJ-1024-80.jpg",
-            "publishedAt": "2026-01-11T05:00:00Z",
-            "content": "The India vs New Zealand ODI series live streams will start off 2026 with a bang. The top two men's 50-over teams in the world by ranking, the sides should serve up a veritable feast of six-hitting a… [+7821 chars]"
-        },
-        {
-            "source": {
-                "id": "espn-cric-info",
-                "name": "ESPN Cric Info"
-            },
-            "author": null,
-            "title": "PCB hands Umar Akmal three-year ban from all cricket | ESPNcricinfo.com",
-            "description": "Penalty after the batsman pleaded guilty to not reporting corrupt approaches | ESPNcricinfo.com",
-            "url": "http://www.espncricinfo.com/story/_/id/29103103/pcb-hands-umar-akmal-three-year-ban-all-cricket",
-            "urlToImage": "https://a4.espncdn.com/combiner/i?img=%2Fi%2Fcricket%2Fcricinfo%2F1099495_800x450.jpg",
-            "publishedAt": "2020-04-27T11:41:47Z",
-            "content": "Umar Akmal's troubled cricket career has hit its biggest roadblock yet, with the PCB handing him a ban from all representative cricket for three years after he pleaded guilty of failing to report det… [+1506 chars]"
-        },
-        {
-            "source": {
-                "id": "espn-cric-info",
-                "name": "ESPN Cric Info"
-            },
-            "author": null,
-            "title": "What we learned from watching the 1992 World Cup final in full again | ESPNcricinfo.com",
-            "description": "Wides, lbw calls, swing - plenty of things were different in white-ball cricket back then | ESPNcricinfo.com",
-            "url": "http://www.espncricinfo.com/story/_/id/28970907/learned-watching-1992-world-cup-final-full-again",
-            "urlToImage": "https://a4.espncdn.com/combiner/i?img=%2Fi%2Fcricket%2Fcricinfo%2F1219926_1296x729.jpg",
-            "publishedAt": "2020-03-30T15:26:05Z",
-            "content": "Last week, we at ESPNcricinfo did something we have been thinking of doing for eight years now: pretend-live ball-by-ball commentary for a classic cricket match. We knew the result, yes, but we tried… [+6823 chars]"
-        }
-    ]
+    articles = []
     constructor() {
         super();
         console.log("hell no");
         this.state = {
             articles: this.articles,
-            loading: false
+            loading: false,
+            page: 1
         }
     }
     async componentDidMount() {
-        let url = "https://newsapi.org/v2/top-headlines?country=us&apiKey=348e9a3a1690482d97b7101bd8415092"
+        let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=348e9a3a1690482d97b7101bd8415092&page=1&pageSize=${this.props.pageSize}`
+        this.setState({ loading: true })
         let data = await fetch(url);
         let paresedData = await data.json()
         console.log(paresedData);
-        this.setState({ articles: paresedData.articles })
+        this.setState({
+            articles: paresedData.articles,
+            totalResults: paresedData.totalResults,
+            loading: false
 
+        })
+
+    }
+    handleNextClick = async () => {
+        if (this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize)) {
+
+        }
+        else {
+
+            let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=348e9a3a1690482d97b7101bd8415092&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`
+            this.setState({ loading: true })
+            let data = await fetch(url);
+            let paresedData = await data.json()
+            console.log(paresedData);
+            this.setState({
+                page: this.state.page + 1,
+                articles: paresedData.articles,
+                loading: false
+            })
+        }
+    }
+    handlePrevClick = async () => {
+        let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=348e9a3a1690482d97b7101bd8415092&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`
+        this.setState({ loading: true })
+        let data = await fetch(url);
+        let paresedData = await data.json()
+        console.log(paresedData);
+        this.setState({
+            page: this.state.page - 1,
+            articles: paresedData.articles,
+            loading: false
+        })
     }
     render() {
 
         return (
-            <div className='container'>
-                <h2>Nwes Hub - Top headlines </h2>
+            <div className='container mt-3'>
+                <h2 className='text-center'>Nwes Hub - Top headlines </h2>
+                {this.state.loading && <Spinner />}
                 <div className="row">
-                    {this.state.articles.map((element) => {
+                    {!this.state.loading && this.state.articles.map((element) => {
                         return <div className="col-md-4" key={element.url}>
                             <NewsItems title={element.title ? element.title.slice(0, 40) : ""}
                                 description={element.description ? element.description.slice(0, 80) : ""}
@@ -76,7 +76,13 @@ export default class News extends Component {
                     })}
 
                 </div>
-
+                <div className="container d-flex justify-content-between mb-3">
+                    <button type="button" className="btn border border rounded-pill  btn-outline-dark" disabled={this.state.page <= 1} onClick={this.handlePrevClick}>&larr;Previos</button>
+                    <button type="button" className="btn btn-outline-dark border border rounded-pill" disabled={(this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize))} onClick={this.handleNextClick}> Next&rarr;</button>
+                </div>
+                <div className="card-footer text-body-secondary text-center mb-4">
+                    <strong>FOR LATEST NEWS STAY TUNED ON NEWS HUB</strong>
+                </div>
             </div>
         )
     }
