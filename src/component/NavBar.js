@@ -19,6 +19,13 @@ export default class NavBar extends Component {
                             <li className="nav-item">
                                 <a className="nav-link" href="/Aboutus">About us</a>
                             </li>
+                            <li className="nav-item"><a className="nav-link" href="/Aboutus">Business</a></li>
+                            <li className="nav-item"><a className="nav-link" href="/Aboutus">Health</a></li>
+                            <li className="nav-item"><a className="nav-link" href="/Aboutus">Sports</a></li>
+                            <li className="nav-item"><a className="nav-link" href="/Aboutus">Genral</a></li>
+                            <li className="nav-item"><a className="nav-link" href="/Aboutus">Entertainment</a></li>
+                            <li className="nav-item"><a className="nav-link" href="/Aboutus">Technology</a></li>
+                            <li className="nav-item"><a className="nav-link" href="/Aboutus">Science</a></li>
                         </ul>
                     </div>
                 </div>

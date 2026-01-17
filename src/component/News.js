@@ -1,10 +1,21 @@
 import React, { Component } from 'react'
 import NewsItems from './NewsItems'
+import PropTypes from 'prop-types'
 import Spinner from './Spinner'
 
 
 
 export default class News extends Component {
+    static defaultProps ={
+        country : 'in',
+        pageSize : 8,
+        category : 'genral'
+    }
+    static defaultProps1 ={
+        country : PropTypes.string,
+        pageSize: PropTypes.number,
+        category: PropTypes.string,
+    }
     articles = []
     constructor() {
         super();
@@ -16,7 +27,7 @@ export default class News extends Component {
         }
     }
     async componentDidMount() {
-        let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=348e9a3a1690482d97b7101bd8415092&page=1&pageSize=${this.props.pageSize}`
+        let url = `https://gnews.io/api/v4/top-headlines?category=${this.props.category}&lang=en&country=${this.props.count}&max=10&apikey=6dc23871c2c233f1786e5643a347460f&page=1&pageSize=${this.props.pageSize}`
         this.setState({ loading: true })
         let data = await fetch(url);
         let paresedData = await data.json()
@@ -35,7 +46,7 @@ export default class News extends Component {
         }
         else {
 
-            let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=348e9a3a1690482d97b7101bd8415092&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`
+            let url = `https://gnews.io/api/v4/top-headlines?category=${this.props.category}&lang=en&country=${this.props.count}&max=10&apikey=6dc23871c2c233f1786e5643a347460f&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`
             this.setState({ loading: true })
             let data = await fetch(url);
             let paresedData = await data.json()
@@ -48,7 +59,7 @@ export default class News extends Component {
         }
     }
     handlePrevClick = async () => {
-        let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=348e9a3a1690482d97b7101bd8415092&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`
+        let url = `https://gnews.io/api/v4/top-headlines?category=${this.props.category}&lang=en&country=${this.props.count}&max=10&apikey=6dc23871c2c233f1786e5643a347460f&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`
         this.setState({ loading: true })
         let data = await fetch(url);
         let paresedData = await data.json()
@@ -63,14 +74,14 @@ export default class News extends Component {
 
         return (
             <div className='container mt-3'>
-                <h2 className='text-center'>Nwes Hub - Top headlines </h2>
+                <h2 className='text-center text-decoration-underline '>News Hub - Top headlines </h2>
                 {this.state.loading && <Spinner />}
                 <div className="row">
                     {!this.state.loading && this.state.articles.map((element) => {
                         return <div className="col-md-4" key={element.url}>
                             <NewsItems title={element.title ? element.title.slice(0, 40) : ""}
                                 description={element.description ? element.description.slice(0, 80) : ""}
-                                src={element.urlToImage}
+                                src={element.image}
                                 newsId={element.url} />
                         </div>
                     })}
