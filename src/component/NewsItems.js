@@ -15,6 +15,7 @@ export default class NewsItems extends Component {
                         onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = fallback;
+                            //give detailed expalination of it      
                         }}
                     />                    <div className="card-body">
                         <h5 className="card-title">{title}...</h5>

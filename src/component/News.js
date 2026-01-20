@@ -27,7 +27,7 @@ export default class News extends Component {
         }
     }
     async componentDidMount() {
-        let url = `https://gnews.io/api/v4/top-headlines?category=${this.props.category}&lang=en&country=${this.props.count}&max=10&apikey=6dc23871c2c233f1786e5643a347460f&page=1&pageSize=${this.props.pageSize}`
+        let url = `https://gnews.io/api/v4/top-headlines?category=${this.props.category}&lang=en&country=${this.props.country}&max=10&apikey=7de3171bb3ea4907daad424d6427c3a7&page=1&pageSize=${this.props.pageSize}`
         this.setState({ loading: true })
         let data = await fetch(url);
         let paresedData = await data.json()
@@ -46,7 +46,7 @@ export default class News extends Component {
         }
         else {
 
-            let url = `https://gnews.io/api/v4/top-headlines?category=${this.props.category}&lang=en&country=${this.props.count}&max=10&apikey=6dc23871c2c233f1786e5643a347460f&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`
+            let url = `https://gnews.io/api/v4/top-headlines?category=${this.props.category}&lang=en&country=${this.props.country}&max=10&apikey=7de3171bb3ea4907daad424d6427c3a7&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`
             this.setState({ loading: true })
             let data = await fetch(url);
             let paresedData = await data.json()
@@ -59,7 +59,7 @@ export default class News extends Component {
         }
     }
     handlePrevClick = async () => {
-        let url = `https://gnews.io/api/v4/top-headlines?category=${this.props.category}&lang=en&country=${this.props.count}&max=10&apikey=6dc23871c2c233f1786e5643a347460f&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`
+        let url = `https://gnews.io/api/v4/top-headlines?category=${this.props.category}&lang=en&country=${this.props.country}&max=10&apikey=7de3171bb3ea4907daad424d6427c3a7&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`
         this.setState({ loading: true })
         let data = await fetch(url);
         let paresedData = await data.json()
@@ -74,7 +74,7 @@ export default class News extends Component {
 
         return (
             <div className='container mt-3'>
-                <h2 className='text-center text-decoration-underline '>News Hub - Top headlines </h2>
+                <h2 className='text-center text-decoration-underlin mt-4 '>News Hub - Top headlines </h2>
                 {this.state.loading && <Spinner />}
                 <div className="row">
                     {!this.state.loading && this.state.articles.map((element) => {
